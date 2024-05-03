@@ -20,6 +20,9 @@ defmodule CodeReview.MixProject do
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
-    []
+    [
+      {:supabase_potion, "~> 0.3"},
+      {:supabase_gotrue, "~> 0.3"}
+    ]
   end
 end

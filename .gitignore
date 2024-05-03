@@ -32,3 +32,6 @@ code_review-*.tar
 
 # Nix files
 result
+
+# Env files
+.env

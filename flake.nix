@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     systems.url = "github:nix-systems/default";
   };
@@ -27,9 +27,9 @@
         };
         devShells.default = with pkgs;
           mkShell {
-            name = "peapescarte";
+            name = "code-review";
             packages = with pkgs;
-              [beam.elixir_1_16 supabase-cli]
+              [beam.elixir_1_16 supabase-cli rustc rustfmt cargo]
               ++ lib.optional stdenv.isLinux [inotify-tools]
               ++ lib.optional stdenv.isDarwin [
                 darwin.apple_sdk.frameworks.CoreServices
