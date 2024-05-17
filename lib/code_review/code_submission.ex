@@ -30,7 +30,7 @@ def submit_code(submission_map) do
     map_with_id = Map.put(submission_map, :author_id, user_id)
     submission_id = create_id(4)
     :ets.insert_new(:submitted_codes, {submission_id, map_with_id})
-    :ok
+    IO.puts("Submissão criada com o ID #{submission_id}")
   end
 end
 
