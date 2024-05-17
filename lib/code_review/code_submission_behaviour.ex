@@ -37,5 +37,4 @@ defmodule CodeReview.CodeSubmissionBehaviour do
   . A segunda função resgata uma única submissão com base no ID, que ao fim retorna somente o mapa
   """
   @callback get_submissions :: list(submission_t)
-
 end
