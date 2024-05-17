@@ -1,10 +1,11 @@
 defmodule CodeReview.CodeSubmissionGenserver do
   use GenServer
 
-  @table :submitted_codes
 
-  def start_link(@table) do
-    GenServer.start_link(__MODULE__, @table)
+  def start_link(_) do
+    #
+    GenServer.start_link(__MODULE__, :submitted_codes, name: __MODULE__)
+
   end
 
   def add({submission_id, submission_map}) do
@@ -32,16 +33,20 @@ def init(table_name) do
 end
 
 @impl true
-def handle_call({:show}, _from, :__MODULE__) do
-  {:reply, :ets.tab2list(__MODULE__)}
+def handle_call(:show, _from, table) do
+  #:reply, o que vai fazer, novo estado
+  {:reply, :ets.tab2list(table), table}
 end
 
-def handle_call({:show, id}, _from, @table) do
-  {:reply, :ets.lookup(@table, id)}
+def handle_call({:show, id}, _from, table) do
+  {:reply, :ets.lookup(table, id), table}
 end
 
-def handle_cast({:add, submission_map}, @table) do
-  {:noreply, :ets.insert_new(@table, submission_map)}
+def handle_cast({:add, {submission_id, submission_map}}, table) do
+  #as implementações de cast são colocadas fora da tupla
+  :ets.insert_new(table, {submission_id, submission_map})
+  #:noreply, novo estado
+  {:noreply,table}
 end
 
 end
