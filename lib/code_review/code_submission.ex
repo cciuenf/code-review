@@ -46,8 +46,12 @@ defmodule CodeReview.CodeSubmission do
   end
 
   def update_code(id, changes) do
-    CodeReview.CodeSubmissionGenserver.update(id, changes)
-    get_submission(id)
+    with true <- changes[:snip] |> is_binary(),
+         true <- changes[:language] |> is_binary(),
+         true <- changes[:description] |> is_binary() do
+      CodeReview.CodeSubmissionGenserver.update(id, changes)
+      get_submission(id)
+    end
   end
 
   @behaviour CodeReview.CodeSubmissionBehaviour
