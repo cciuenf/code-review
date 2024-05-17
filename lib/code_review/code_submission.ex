@@ -18,9 +18,6 @@ defp take_first_chars(string, n) do
   String.slice(string, 0, n)
 end
 
-def creating_table() do
-  codes_table = :ets.new(:submitted_codes, [:set, :protected, :named_table])
-end
 
 def submit_code(submission_map) do
   with true <- submission_map[:snip] |> is_binary(),
@@ -29,13 +26,14 @@ def submit_code(submission_map) do
     user_id = create_id(3)
     map_with_id = Map.put(submission_map, :author_id, user_id)
     submission_id = create_id(4)
-    :ets.insert_new(:submitted_codes, {submission_id, map_with_id})
-    IO.puts("Submissão criada com o ID #{submission_id}")
+    CodeReview.CodeSubmissionGenserver.add({submission_id, map_with_id})
+    #:ets.insert_new(:submitted_codes, {submission_id, map_with_id})
+    #IO.puts("Submissão criada com o ID #{submission_id}")
   end
 end
 
 def get_submissions() do
-  :ets.tab2list(:submitted_codes)
+  CodeReview.CodeSubmissionGenserver.show_table()
 end
 
 def get_submission(id) do
