@@ -25,8 +25,10 @@ defmodule CodeReview.CodeSubmission do
       user_id = create_id(3)
       map_with_id = Map.put(submission_map, :author_id, user_id)
       submission_id = create_id(4)
-      CodeReview.CodeSubmissionGenserver.add(submission_id, map_with_id)
-      IO.puts("Submissão criada com o ID: #{submission_id}")
+      CodeReview.CodeSubmissionGenserver.add_submission(submission_id, map_with_id)
+      {:ok, map_with_id}
+    else
+      false -> {:error, "Erro na submissão!"}
     end
   end
 
@@ -49,8 +51,10 @@ defmodule CodeReview.CodeSubmission do
     with true <- changes[:snip] |> is_binary(),
          true <- changes[:language] |> is_binary(),
          true <- changes[:description] |> is_binary() do
-      CodeReview.CodeSubmissionGenserver.update(id, changes)
-      get_submission(id)
+      CodeReview.CodeSubmissionGenserver.update_submission(id, changes)
+      {:ok, changes}
+    else
+      false -> {:error, "Erro no update!"}
     end
   end
 

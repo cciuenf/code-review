@@ -25,11 +25,11 @@ defmodule CodeReview.CodeSubmissionGenserver do
     GenServer.start_link(__MODULE__, :submitted_codes, name: __MODULE__)
   end
 
-  def add(submission_id, submission_map) do
+  def add_submission(submission_id, submission_map) do
     GenServer.cast(__MODULE__, {:add, {submission_id, submission_map}})
   end
 
-  def update(map_id, changes) do
+  def update_submission(map_id, changes) do
     GenServer.cast(__MODULE__, {:update, {map_id, changes}})
   end
 
