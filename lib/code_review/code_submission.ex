@@ -25,7 +25,7 @@ defmodule CodeReview.CodeSubmission do
       user_id = create_id(3)
       map_with_id = Map.put(submission_map, :author_id, user_id)
       submission_id = create_id(4)
-      CodeReview.CodeSubmissionGenserver.add({submission_id, map_with_id})
+      CodeReview.CodeSubmissionGenserver.add(submission_id, map_with_id)
       IO.puts("Submissão criada com o ID: #{submission_id}")
     end
   end
