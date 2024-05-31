@@ -3,11 +3,12 @@ defmodule CodeReview.CodeHistory do
 
   alias CodeReview.{CodeHistoryBehaviour, CodeHistoryGenserver, CodeFeedbackBehaviour}
 
+
   @impl CodeHistoryBehaviour
   def vote_on_comment(vote_t) do
     case validate_vote_type(vote_t[:vote_type]) do
       :ok ->
-        case CodeFeedbackBehaviour.get_comment(vote_t[:comment_id]) do
+        case CodeFeedback.get_comment(vote_t[:comment_id]) do
           {:ok, _comment} ->
             save_vote(vote_t)
           {:error, reason} ->
