@@ -5,7 +5,7 @@ defmodule CodeReview.CodeHistoryGenserver do
   GenServer para gerenciar votações de comentários.
   """
 
-  def start_link do
+  def start_link(_) do
     GenServer.start_link(__MODULE__, :comment_votes, name: __MODULE__)
   end
 
