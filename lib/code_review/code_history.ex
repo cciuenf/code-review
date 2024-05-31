@@ -4,13 +4,12 @@ defmodule CodeReview.CodeHistory do
   alias CodeReview.{CodeHistoryBehaviour, CodeHistoryGenserver, CodeFeedbackBehaviour}
 
   @impl CodeHistoryBehaviour
-  def vote(%{comment_id: comment_id, voter_id: voter_id, vote_type: vote_type}) do
-    case validate_vote_type(vote_type) do
+  def vote_on_comment(vote_t) do
+    case validate_vote_type(vote_t[:vote_type]) do
       :ok ->
-        case CodeFeedbackBehaviour.get_comment(comment_id) do
+        case CodeFeedbackBehaviour.get_comment(vote_t[:comment_id]) do
           {:ok, _comment} ->
-            vote = %{comment_id: comment_id, voter_id: voter_id, vote_type: vote_type}
-            save_vote(vote)
+            save_vote(vote_t)
           {:error, reason} ->
             {:error, reason}
         end
@@ -23,11 +22,11 @@ defmodule CodeReview.CodeHistory do
   defp validate_vote_type(:downvote), do: :ok
   defp validate_vote_type(_), do: {:error, "Invalid vote type"}
 
-  defp save_vote(vote) do
-    CodeHistoryGenserver.add_vote(vote.comment_id, vote.voter_id, vote.vote_type)
+  def save_vote(vote_t) do
+    CodeHistoryGenserver.add_vote(vote_t)
   end
 
-  defp list_votes(comment_id) do
+  def get_revision_history(comment_id) do
     CodeHistoryGenserver.list_votes(comment_id)
   end
 end

@@ -9,8 +9,8 @@ defmodule CodeReview.CodeHistoryGenserver do
     GenServer.start_link(__MODULE__, :comment_votes, name: __MODULE__)
   end
 
-  def add_vote(comment_id, voter_id, vote_type) do
-    GenServer.cast(__MODULE__, {:add_vote, {comment_id, voter_id, vote_type}})
+  def add_vote(vote_t) do
+    GenServer.cast(__MODULE__, {:add_vote, vote_t})
   end
 
   def list_votes(comment_id) do
@@ -33,14 +33,13 @@ defmodule CodeReview.CodeHistoryGenserver do
   end
 
   @impl true
-  def handle_cast({:add_vote, {comment_id, voter_id, vote_type}}, table) do
-    vote = %{comment_id: comment_id, voter_id: voter_id, vote_type: vote_type}
+  def handle_cast({:add_vote, vote_t}, table) do
 
-    case :ets.lookup(table, comment_id) do
+    case :ets.lookup(table, vote_t[:comment_id]) do
       [] ->
-        :ets.insert_new(table, {comment_id, [vote]})
+        :ets.insert_new(table, {vote_t[:comment_id], [vote_t]})
       [{_comment_id, votes}] ->
-        :ets.insert(table, {comment_id, votes ++ [vote]})
+        :ets.insert(table, {vote_t[:comment_id], votes ++ [vote_t]})
     end
 
     {:noreply, table}
