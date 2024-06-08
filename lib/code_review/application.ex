@@ -1,6 +1,7 @@
 defmodule CodeReview.Application do
   def start(_type, _args) do
     children = [
+      CodeReview.CodeHistoryGenserver,
       CodeReview.CodeFeedbackGenserver
     ]
 
